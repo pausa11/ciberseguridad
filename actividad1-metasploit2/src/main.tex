@@ -78,7 +78,7 @@
 
   \vspace{3cm}
 
-  {\large Daniel Torosoto}
+  {\large Daniel Toro Soto}
 
   \vfill
 
@@ -432,51 +432,209 @@ Se obtuvieron los archivos \texttt{/etc/passwd} y \texttt{/etc/shadow} del servi
 
 \subsection{Descripción de la vulnerabilidad}
 
-% TODO: completar tras realizar la tarea
+El ataque de fuerza bruta consiste en probar sistemáticamente combinaciones de credenciales hasta encontrar las válidas. DVWA expone este tipo de vulnerabilidad a través de su módulo \textit{Brute Force}, que carece de mecanismos de protección como bloqueo de cuenta tras intentos fallidos, CAPTCHA o limitación de tasa (\textit{rate limiting}). Adicionalmente, el formulario de autenticación principal de DVWA (\texttt{/dvwa/login.php}) presenta la misma debilidad: responde con un mensaje predecible (\texttt{Login failed}) ante credenciales incorrectas, lo que permite automatizar el ataque de forma trivial.
 
 \subsection{Herramientas utilizadas}
 
-% TODO: completar tras realizar la tarea
+\begin{itemize}
+    \item \textbf{Burp Suite Community Edition} — proxy HTTP utilizado para interceptar y analizar las peticiones del formulario de autenticación de DVWA, identificar los parámetros de la solicitud e configurar el ataque de diccionario mediante el módulo \textit{Intruder}.
+    \item \textbf{Hydra v9.5} — herramienta de fuerza bruta en red que automatiza el envío de credenciales contra el formulario de login HTTP. Se utilizó el módulo \texttt{http-post-form} con el diccionario \texttt{rockyou.txt}.
+    \item \textbf{rockyou.txt} — diccionario de contraseñas con más de 14 millones de entradas, ubicado en \texttt{/usr/share/wordlists/rockyou.txt} en Kali Linux.
+\end{itemize}
 
 \subsection{Pasos realizados}
 
-% TODO: completar tras realizar la tarea
+\textbf{Fase 1 — Interceptación con Burp Suite:}
+
+\begin{enumerate}
+    \item Se configuró Firefox en Kali para usar el proxy de Burp Suite en \texttt{127.0.0.1:8081}.
+    \item Se accedió a \texttt{http://192.168.128.2/dvwa/vulnerabilities/brute/} con una sesión autenticada en DVWA (nivel de seguridad: \textit{Low}).
+    \item Burp Suite interceptó la petición GET al enviar un intento de login, revelando los parámetros \texttt{username}, \texttt{password} y \texttt{Login} (Figura \ref{fig:t4_burp_proxy}).
+    \item La petición se envió al módulo \textit{Intruder} con tipo de ataque \textit{Sniper}, marcando el parámetro \texttt{password} como posición de payload (\texttt{\S{}wrongpass\S{}}) (Figura \ref{fig:t4_burp_intruder}).
+    \item Se ejecutó el ataque con el diccionario \texttt{rockyou.txt} como lista de payloads (Figura \ref{fig:t4_burp_attack}).
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{../img/tarea4/t4_burpsuite_httphistory_kali.png}
+    \caption{\textit{Burp Suite — historial HTTP mostrando la petición interceptada al módulo Brute Force de DVWA.}}
+    \label{fig:t4_burp_proxy}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{../img/tarea4/t4_burpsuite_intruder_kali.png}
+    \caption{\textit{Burp Suite Intruder — configuración de posiciones con el parámetro \texttt{password} marcado como payload (\texttt{\S{}wrongpass\S{}}).}}
+    \label{fig:t4_burp_intruder}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{../img/tarea4/t4_burpsuite_intruder_attack.png}
+    \caption{\textit{Burp Suite Intruder — resultados del ataque de diccionario. Las respuestas con longitud diferente al resto indican credenciales válidas.}}
+    \label{fig:t4_burp_attack}
+\end{figure}
+
+\textbf{Fase 2 — Ataque con Hydra:}
+
+\begin{enumerate}
+    \item Se descomprimió el diccionario \texttt{rockyou.txt}: \texttt{sudo gunzip /usr/share/wordlists/rockyou.txt.gz}.
+    \item Se ejecutó Hydra contra el formulario de login de DVWA (\texttt{/dvwa/login.php}) usando el módulo \texttt{http-post-form}, especificando como condición de fallo la cadena \texttt{Login failed} presente en todas las respuestas con credenciales incorrectas.
+\end{enumerate}
+
+\begin{lstlisting}[language=bash, caption={Comando Hydra para ataque de fuerza bruta contra el login de DVWA}]
+hydra -l admin -P /usr/share/wordlists/rockyou.txt 192.168.128.2 \
+  http-post-form \
+  "/dvwa/login.php:username=^USER^&password=^PASS^&Login=Login:Login failed" \
+  -V -f
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{../img/tarea4/t4_hydra_kali.png}
+    \caption{\textit{Hydra v9.5 — ataque de fuerza bruta completado. La credencial \texttt{admin:password} fue encontrada en el intento número 4.}}
+    \label{fig:t4_hydra}
+\end{figure}
 
 \subsection{Funcionamiento del ataque}
 
-% TODO: completar tras realizar la tarea
+El ataque de fuerza bruta automatizado opera en dos etapas complementarias. En la primera, Burp Suite actúa como proxy interceptando la petición HTTP legítima, lo que permite identificar la estructura exacta del formulario (parámetros, método, URL). El módulo \textit{Intruder} reutiliza esa petición real sustituyendo el valor del campo \texttt{password} por cada entrada del diccionario en sucesivos intentos.
+
+En la segunda etapa, Hydra envía peticiones POST a \texttt{/dvwa/login.php} reemplazando las marcas \texttt{\^{}USER\^{}} y \texttt{\^{}PASS\^{}} por el usuario objetivo y cada contraseña del diccionario \texttt{rockyou.txt}. Para cada respuesta recibida, Hydra verifica si contiene la cadena de fallo \texttt{Login failed}: si está presente, la contraseña es incorrecta; si no está presente, se declara la credencial como válida. Con 16 tareas paralelas, Hydra procesó 14\,344\,399 contraseñas potenciales a velocidad de red, encontrando la correcta en menos de 2 segundos.
+
+La ausencia de controles de seguridad en DVWA (sin bloqueo por intentos fallidos, sin CAPTCHA, sin limitación de tasa) hace que el ataque sea completamente efectivo.
 
 \subsection{Resultado}
 
-% TODO: completar tras realizar la tarea
+Ambas herramientas confirmaron las mismas credenciales del administrador de DVWA:
+
+\begin{itemize}
+    \item \textbf{Usuario:} \texttt{admin}
+    \item \textbf{Contraseña:} \texttt{password}
+\end{itemize}
+
+Hydra encontró la contraseña en el intento número 4 de 14\,344\,399, ya que \texttt{password} es la cuarta entrada del diccionario \texttt{rockyou.txt}. El ataque completó en aproximadamente 2 segundos. Esto demuestra que contraseñas débiles y predecibles, combinadas con la ausencia de mecanismos anti-fuerza-bruta, representan un riesgo crítico de seguridad incluso en entornos web protegidos por autenticación.
 
 % ==========================================================
 \section{Tarea 5: Cracking de Contraseñas con John the Ripper}
 
 \subsection{Descripción de la vulnerabilidad}
 
-% TODO: completar tras realizar la tarea
+El cracking de contraseñas fuera de línea (\textit{offline password cracking}) consiste en obtener los hashes almacenados en el sistema y someterlos a ataques de diccionario o fuerza bruta en local, sin interactuar nuevamente con el sistema víctima. En sistemas GNU/Linux, las contraseñas se almacenan como hashes criptográficos en el archivo \texttt{/etc/shadow}, el cual en condiciones normales solo es legible por \texttt{root}.
+
+Metasploitable2 almacena sus contraseñas con el algoritmo \textbf{md5crypt} (\texttt{\$1\$}), una variante de MD5 diseñada para hashing de contraseñas. Aunque en su momento fue considerado aceptable, md5crypt es actualmente vulnerable a ataques rápidos por diccionario debido a la baja complejidad computacional del algoritmo y a que muchos usuarios eligen contraseñas débiles o predecibles. Una vez que un atacante obtiene el archivo \texttt{/etc/shadow} (como se logró en la Tarea 3), puede realizar el cracking en su propia máquina sin restricciones de tiempo ni límites de intentos.
 
 \subsection{Herramientas utilizadas}
 
-% TODO: completar tras realizar la tarea
+\begin{itemize}
+  \item \textbf{unshadow}: Utilidad incluida con John the Ripper que combina los archivos \texttt{/etc/passwd} y \texttt{/etc/shadow} en un único archivo en el formato requerido por John. Esto es necesario porque John necesita tanto el nombre de usuario (en \texttt{passwd}) como el hash de la contraseña (en \texttt{shadow}) para operar correctamente.
+  \item \textbf{John the Ripper (Jumbo)}: Herramienta de cracking de contraseñas fuera de línea de código abierto. Implementa múltiples modos de ataque de forma automática y secuencial: modo \textit{Single} (deriva contraseñas candidatas a partir del nombre de usuario y campos GECOS), modo \textit{Wordlist} (ataque de diccionario usando \texttt{/usr/share/john/password.lst}) y modo \textit{Incremental} (fuerza bruta por charset). Detecta automáticamente el tipo de hash y paraleliza el trabajo con OpenMP.
+\end{itemize}
 
 \subsection{Pasos realizados}
 
-% TODO: completar tras realizar la tarea
+\subsubsection{Obtención del archivo /etc/shadow}
+
+Dado que el contenido de \texttt{/etc/shadow} no había sido guardado en texto plano durante la Tarea 3, se reutilizó la sesión root obtenida mediante el backdoor vsftpd (Tarea 1) para recuperar el archivo directamente desde la shell interactiva:
+
+\begin{lstlisting}[language=bash, caption={Obtención de /etc/shadow desde la shell root del backdoor vsftpd}]
+cat /etc/shadow
+\end{lstlisting}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{../img/tarea5/msfconsole_exploit_cat_etcshadow_kali.png}
+  \caption{\textit{Contenido de /etc/shadow obtenido desde la shell root del backdoor vsftpd 2.3.4, mostrando los hashes md5crypt de los usuarios del sistema.}}
+\end{figure}
+
+\subsubsection{Preparación de los archivos}
+
+En una terminal de Kali Linux se creó el directorio de trabajo \texttt{\textasciitilde{}/tarea5} y se guardaron los contenidos de \texttt{/etc/passwd} y \texttt{/etc/shadow} en los archivos \texttt{passwd.txt} y \texttt{shadow.txt} respectivamente.
+
+\subsubsection{Combinación con unshadow}
+
+Se ejecutó \texttt{unshadow} para generar el archivo \texttt{combined.txt} que contiene, por cada usuario, el nombre de cuenta junto con su hash de contraseña en un único registro:
+
+\begin{lstlisting}[language=bash, caption={Combinación de passwd y shadow con unshadow}]
+unshadow passwd.txt shadow.txt > combined.txt
+\end{lstlisting}
+
+\subsubsection{Cracking con John the Ripper}
+
+Se ejecutó John the Ripper sobre el archivo combinado. John detectó automáticamente el tipo de hash \texttt{md5crypt} y cargó 7 hashes con 7 saltos distintos, utilizando 4 hilos OpenMP:
+
+\begin{lstlisting}[language=bash, caption={Ejecución de John the Ripper para cracking de hashes md5crypt}]
+john combined.txt
+\end{lstlisting}
+
+John procedió de forma automática con tres modos en secuencia. En el modo \textit{Single} crackeó inmediatamente cuatro contraseñas cuyo valor coincide con el nombre de usuario (\texttt{user}, \texttt{postgres}, \texttt{msfadmin}, \texttt{service}). En el modo \textit{Wordlist} encontró dos contraseñas adicionales (\texttt{123456789} para \texttt{klog} y \texttt{batman} para \texttt{sys}). El séptimo hash (\texttt{root}) no fue crackeado en el tiempo disponible durante el modo \textit{Incremental}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{../img/tarea5/jhon_running.png}
+  \caption{\textit{John the Ripper ejecutándose en modo Single y Wordlist, mostrando las contraseñas crackeadas en tiempo real.}}
+\end{figure}
+
+\subsubsection{Visualización de resultados}
+
+Una vez detenido el proceso, se consultaron los hashes crackeados acumulados en la base de datos interna de John:
+
+\begin{lstlisting}[language=bash, caption={Consulta de contraseñas crackeadas con john --show}]
+john --show combined.txt
+\end{lstlisting}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{../img/tarea5/jhon_show_kali.png}
+  \caption{\textit{Resultado de john --show mostrando las 6 contraseñas crackeadas del sistema Metasploitable2.}}
+\end{figure}
 
 \subsection{Funcionamiento del ataque}
 
-% TODO: completar tras realizar la tarea
+El ataque de cracking fuera de línea opera en tres fases:
+
+\begin{enumerate}
+  \item \textbf{Preparación}: \texttt{unshadow} fusiona \texttt{/etc/passwd} y \texttt{/etc/shadow} en un único archivo donde cada línea contiene el usuario y su hash. Esto permite a John asociar cada hash con su nombre de cuenta para el modo Single.
+  \item \textbf{Ataque por diccionario}: John calcula el hash md5crypt de cada contraseña candidata (nombre de usuario, variantes con mayúsculas/números, y luego entradas del diccionario \texttt{password.lst}) y lo compara contra los hashes almacenados. Cuando hay coincidencia, la contraseña queda revelada en texto plano.
+  \item \textbf{Fuerza bruta incremental}: Si el diccionario no agota todos los hashes, John genera combinaciones de caracteres de forma sistemática por charset (\texttt{ASCII}), probando todas las posibilidades de longitud creciente. Este modo puede encontrar contraseñas arbitrarias pero requiere tiempo proporcional al espacio de búsqueda.
+\end{enumerate}
+
+La velocidad del ataque depende del algoritmo de hash: md5crypt, al ser relativamente rápido y carecer de trabajo adaptativo (como bcrypt o Argon2), permite procesar en torno a 111\,000 hashes por segundo en el hardware disponible (Apple M4 con emulación ARM), lo que hace viable el cracking de contraseñas débiles en segundos o minutos.
 
 \subsection{Resultado}
 
-% TODO: completar tras realizar la tarea
+John the Ripper crackeó \textbf{6 de los 7 hashes} presentes en el archivo \texttt{/etc/shadow} de Metasploitable2:
+
+\begin{table}[H]
+  \centering
+  \caption{\textit{Contraseñas crackeadas por John the Ripper en Metasploitable2}}
+  \begin{tabular}{@{}lll@{}}
+    \toprule
+    \textbf{Usuario} & \textbf{Contraseña} & \textbf{Modo de cracking} \\
+    \midrule
+    user     & user      & Single (nombre de usuario) \\
+    postgres & postgres  & Single (nombre de usuario) \\
+    msfadmin & msfadmin  & Single (nombre de usuario) \\
+    service  & service   & Single (nombre de usuario) \\
+    klog     & 123456789 & Wordlist \\
+    sys      & batman    & Wordlist \\
+    root     & —         & No crackeado (tiempo insuficiente) \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Cuatro de las seis contraseñas crackeadas son idénticas al nombre de usuario, lo que evidencia una política de contraseñas nula en Metasploitable2. Las contraseñas \texttt{123456789} y \texttt{batman} fueron encontradas en el diccionario \texttt{password.lst}, confirmando que son contraseñas comunes y predecibles. El hash de \texttt{root} no fue crackeado en el tiempo disponible con el modo incremental, aunque podría serlo con mayor tiempo de cómputo o un diccionario más amplio como \texttt{rockyou.txt}.
 
 % ==========================================================
 \section{Conclusiones}
 
-% TODO: completar al finalizar todas las tareas
+El desarrollo de esta actividad permitió demostrar de forma práctica cómo una serie de vulnerabilidades conocidas en Metasploitable2 puede ser encadenada para comprometer completamente un sistema. A través de cinco vectores de ataque distintos se evidenció que la seguridad de un entorno no depende de un único control, sino de la suma de todos sus componentes.
+
+La explotación del backdoor en vsftpd 2.3.4 ilustró el riesgo crítico de usar software cuya integridad no ha sido verificada: una sola línea de código malicioso insertada en el repositorio oficial fue suficiente para entregar acceso root sin autenticación. El ataque de SQL Injection sobre DVWA mostró que la concatenación directa de entrada del usuario en consultas SQL sigue siendo una de las vulnerabilidades más prevalentes y devastadoras, permitiendo la extracción completa de la base de datos incluyendo credenciales.
+
+La ejecución de comandos vía DVWA demostró que la falta de sanitización de entrada en funciones de sistema no solo expone datos sensibles, sino que puede comprometer archivos protegidos como \texttt{/etc/shadow}, normalmente accesibles solo por root. El ataque de fuerza bruta con Hydra y Burp Suite evidenció que la ausencia de controles anti-automatización convierte cualquier formulario de autenticación en un blanco trivial para herramientas de diccionario.
+
+Finalmente, el cracking offline con John the Ripper mostró que el almacenamiento de contraseñas con algoritmos débiles como md5crypt, combinado con contraseñas predecibles (o idénticas al nombre de usuario), permite recuperar las credenciales del sistema en segundos. En conjunto, los resultados de esta actividad refuerzan la importancia de aplicar principios de defensa en profundidad: actualizar software, validar entradas, implementar políticas de contraseñas robustas y monitorear el acceso a archivos críticos del sistema.
 
 % ==========================================================
 \section{Referencias}
@@ -487,6 +645,7 @@ Se obtuvieron los archivos \texttt{/etc/passwd} y \texttt{/etc/shadow} del servi
   \item National Vulnerability Database. (2011). \textit{CVE-2011-2523}. \url{https://nvd.nist.gov/vuln/detail/CVE-2011-2523}
   \item OWASP. (2021). \textit{OWASP Top Ten}. \url{https://owasp.org/www-project-top-ten/}
   \item Rapid7. (2024). \textit{Metasploit Framework Documentation}. \url{https://docs.metasploit.com/}
+  \item Openwall Project. (2024). \textit{John the Ripper password cracker}. \url{https://www.openwall.com/john/}
 \end{itemize}
 
 \end{document}

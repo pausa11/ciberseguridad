@@ -50,15 +50,18 @@ cd src && pdflatex main.tex && pdflatex main.tex
 - Herramientas: Nmap, Metasploit (`exploit/unix/ftp/vsftpd_234_backdoor`)
 - Imágenes en: `img/tarea1/`
 
-### Tarea 2 — SQL Injection en DVWA
+### Tarea 2 — SQL Injection en DVWA ✅
 - Obtener la información de la base de datos de DVWA.
 - Herramientas: sqlmap, interfaz web de DVWA.
+- Imágenes en: `img/tarea2/` | Shell output en: `shellText/kali/tarea2/`
 
-### Tarea 3 — Command Execution en DVWA
+### Tarea 3 — Command Execution en DVWA ✅
 - Obtener `/etc/passwd` y `/etc/shadow` vía Command Execution de DVWA.
+- Imágenes en: `img/tarea3/` | Shell output en: `shellText/kali/tarea3/` (archivos `cat_etc_passwd.txt`, `cat_etc_shadow.txt`)
 
-### Tarea 4 — Fuerza Bruta a DVWA
+### Tarea 4 — Fuerza Bruta a DVWA ✅
 - Herramientas: **Burp Suite** y **Hydra**.
+- Imágenes en: `img/tarea4/` | Shell output en: `shellText/kali/tarea4/`
 
 ### Tarea 5 — Cracking de contraseñas offline
 - Usar `/etc/passwd` y `/etc/shadow` obtenidos en Tarea 3.
@@ -72,8 +75,15 @@ actividad1-metasploit2/
 ├── docs/                    # Enunciado y documentación de referencia
 ├── img/
 │   ├── ambiente/            # Capturas del entorno (UTM, Kali, Metasploitable2)
-│   └── tarea1/              # Capturas por tarea (nombradas t<N>_<descripcion>.png)
-├── shellText/kali/tarea1/   # Texto de terminales copiado de Kali
+│   ├── tarea1/              # Capturas por tarea (nombradas t<N>_<descripcion>.png)
+│   ├── tarea2/
+│   ├── tarea3/
+│   └── tarea4/
+├── shellText/kali/
+│   ├── tarea1/              # Texto de terminales copiado de Kali
+│   ├── tarea2/
+│   ├── tarea3/              # cat_etc_passwd.txt, cat_etc_shadow.txt
+│   └── tarea4/              # hydra.txt
 └── src/
     ├── main.tex             # Documento principal
     └── .gitignore           # Excluye artefactos de compilación LaTeX

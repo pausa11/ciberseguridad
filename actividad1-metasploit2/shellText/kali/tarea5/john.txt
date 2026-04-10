@@ -1,0 +1,37 @@
+┌──(kali㉿kali)-[~/tarea5]
+└─$ unshadow passwd.txt shadow.txt > combined.txt
+
+┌──(kali㉿kali)-[~/tarea5]
+└─$ ls
+combined.txt  passwd.txt  shadow.txt
+
+┌──(kali㉿kali)-[~/tarea5]
+└─$ john combined.txt
+Warning: detected hash type "md5crypt", but the string is also recognized as "md5crypt-long"
+Use the "--format=md5crypt-long" option to force loading these as that type instead
+Using default input encoding: UTF-8
+Loaded 7 password hashes with 7 different salts (md5crypt, crypt(3) $1$ (and variants) [MD5 128/128 ASIMD 4x2])
+Will run 4 OpenMP threads
+Proceeding with single, rules:Single
+Press 'q' or Ctrl-C to abort, almost any other key for status
+user             (  user)
+postgres         (  postgres)
+msfadmin         (  msfadmin)
+service          (  service)
+Almost done: Processing the remaining buffered candidate passwords, if any.
+Proceeding with wordlist:/usr/share/john/password.lst
+123456789        (  klog)
+batman           (  sys)
+Proceeding with incremental:ASCII
+^C
+
+┌──(kali㉿kali)-[~/tarea5]
+└─$ john --show combined.txt
+sys:batman:3:3:sys:/dev:/bin/sh
+klog:123456789:103:104::/home/klog:/bin/false
+msfadmin:msfadmin:1000:1000:msfadmin,,,:/home/msfadmin:/bin/bash
+postgres:postgres:108:117:PostgreSQL administrator,,,:/var/lib/postgresql:/bin/bash
+user:user:1001:1001:just a user,111,,:/home/user:/bin/bash
+service:service:1002:1002:,,,:/home/service:/bin/bash
+
+6 password hashes cracked, 1 left
