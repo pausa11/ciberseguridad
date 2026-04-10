@@ -6,7 +6,6 @@
 \usepackage[spanish]{babel}
 \usepackage{geometry}
 \usepackage{setspace}
-\usepackage{parskip}
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{hyperref}
@@ -30,6 +29,9 @@
 
 % ---------- Interlineado doble ----------
 \doublespacing
+
+% ---------- Sangría APA (0.5 in = 1.27 cm) ----------
+\setlength{\parindent}{1.27cm}
 
 % ---------- Estilo de página ----------
 \pagestyle{fancy}
@@ -639,13 +641,13 @@ Finalmente, el cracking offline con John the Ripper mostró que el almacenamient
 % ==========================================================
 \section{Referencias}
 
-\begin{itemize}
+\begin{list}{}{\leftmargin=1.27cm \itemindent=-1.27cm \itemsep=0pt \parsep=0pt}
   \item Kennedy, D., O'Gorman, J., Kearns, D., \& Aharoni, M. (2011). \textit{Metasploit: The Penetration Tester's Guide}. No Starch Press.
   \item Offensive Security. (2024). \textit{Metasploit Unleashed}. \url{https://www.offsec.com/metasploit-unleashed/}
   \item National Vulnerability Database. (2011). \textit{CVE-2011-2523}. \url{https://nvd.nist.gov/vuln/detail/CVE-2011-2523}
   \item OWASP. (2021). \textit{OWASP Top Ten}. \url{https://owasp.org/www-project-top-ten/}
   \item Rapid7. (2024). \textit{Metasploit Framework Documentation}. \url{https://docs.metasploit.com/}
   \item Openwall Project. (2024). \textit{John the Ripper password cracker}. \url{https://www.openwall.com/john/}
-\end{itemize}
+\end{list}
 
 \end{document}
