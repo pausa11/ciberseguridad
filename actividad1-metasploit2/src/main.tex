@@ -355,23 +355,77 @@ Además, se identificaron 6 bases de datos adicionales en el servidor (\texttt{i
 
 \subsection{Descripción de la vulnerabilidad}
 
-% TODO: completar tras realizar la tarea
+La vulnerabilidad de ejecución de comandos (\textit{Command Injection}) se produce cuando una aplicación web incorpora datos proporcionados por el usuario como parte de un comando del sistema operativo sin aplicar ningún tipo de sanitización. En PHP, funciones como \texttt{shell\_exec()}, \texttt{exec()} o \texttt{passthru()} ejecutan el comando construido directamente en el sistema operativo subyacente. Si el valor de entrada no es validado, un atacante puede anexar comandos arbitrarios utilizando operadores de encadenamiento de shell como \texttt{;}, \texttt{\&\&} o \texttt{|}.
+
+En DVWA con nivel de seguridad \textit{Low}, el módulo \textbf{Command Execution} recibe un campo de dirección IP para ejecutar un ping y concatena la entrada directamente en la llamada al sistema sin ningún filtrado, lo que permite inyectar comandos adicionales con pleno acceso a los recursos del servidor.
 
 \subsection{Herramientas utilizadas}
 
-% TODO: completar tras realizar la tarea
+\begin{itemize}
+  \item \textbf{DVWA} (\textit{Damn Vulnerable Web Application}): Aplicación web vulnerable que corre en el servidor Apache de Metasploitable2. El módulo \textit{Command Execution} expone la vulnerabilidad de inyección de comandos en nivel de seguridad Low.
+  \item \textbf{Navegador web (Firefox en Kali Linux)}: Utilizado para interactuar con la interfaz de DVWA y enviar los payloads de inyección de comandos.
+\end{itemize}
 
 \subsection{Pasos realizados}
 
-% TODO: completar tras realizar la tarea
+\subsubsection{Acceso al módulo Command Execution en DVWA}
+
+Desde el navegador en Kali Linux se accedió a DVWA en \texttt{http://192.168.128.2/dvwa} con las credenciales \texttt{admin} / \texttt{password}, con el nivel de seguridad establecido en \textbf{Low}. Se navegó a la sección \textbf{Command Execution} del menú lateral.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{../img/tarea3/t3_command_execution_kali.png}
+  \caption{\textit{Módulo Command Execution de DVWA con el formulario de ping listo para recibir entrada.}}
+\end{figure}
+
+\subsubsection{Inyección de comando para obtener /etc/passwd}
+
+En el campo de dirección IP se ingresó el siguiente payload, que encadena el comando \texttt{cat /etc/passwd} al ping legítimo usando el operador \texttt{;}:
+
+\begin{lstlisting}[language=bash, caption={Payload de inyección para leer /etc/passwd}]
+127.0.0.1; cat /etc/passwd
+\end{lstlisting}
+
+Al enviar el formulario, el servidor ejecutó primero el ping a \texttt{127.0.0.1} y luego el comando \texttt{cat /etc/passwd}, mostrando el contenido completo del archivo en la página de respuesta.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{../img/tarea3/t3_command_execution_cat_passwd.png}
+  \caption{\textit{Resultado de la inyección mostrando el contenido completo de /etc/passwd del servidor Metasploitable2.}}
+\end{figure}
+
+El archivo \texttt{/etc/passwd} obtenido lista 19 usuarios del sistema, entre ellos cuentas con shell interactiva como \texttt{root}, \texttt{msfadmin}, \texttt{user}, \texttt{service} y \texttt{postgres}.
+
+\subsubsection{Inyección de comando para obtener /etc/shadow}
+
+De manera análoga, se inyectó el comando para leer el archivo \texttt{/etc/shadow}, que contiene los hashes de las contraseñas del sistema:
+
+\begin{lstlisting}[language=bash, caption={Payload de inyección para leer /etc/shadow}]
+127.0.0.1; cat /etc/shadow
+\end{lstlisting}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{../img/tarea3/t3_command_execution_cat_shadow.png}
+  \caption{\textit{Resultado de la inyección mostrando el contenido de /etc/shadow con los hashes de contraseñas del servidor.}}
+\end{figure}
+
+En condiciones normales, el archivo \texttt{/etc/shadow} solo es legible por el usuario \texttt{root}. El hecho de que el servidor web lo exponga evidencia que el proceso PHP se ejecuta con privilegios elevados en Metasploitable2.
 
 \subsection{Funcionamiento del ataque}
 
-% TODO: completar tras realizar la tarea
+El ataque de inyección de comandos sigue el siguiente flujo:
+
+\begin{enumerate}
+  \item \textbf{Identificación del punto de inyección}: El módulo Command Execution de DVWA expone un campo de texto donde el usuario ingresa una dirección IP para ejecutar un ping. Internamente, el código PHP construye el comando de la forma: \texttt{shell\_exec("ping -c 3 " . \$\_REQUEST['ip'])}.
+  \item \textbf{Construcción del payload}: El atacante aprovecha el operador de shell \texttt{;} para separar y encadenar un segundo comando arbitrario al ping legítimo, de la forma \texttt{127.0.0.1; <comando>}.
+  \item \textbf{Ejecución en el servidor}: El servidor ejecuta ambos comandos en el contexto del usuario que corre el proceso Apache (\texttt{www-data} o equivalente). En Metasploitable2, este proceso tiene permisos suficientes para leer \texttt{/etc/shadow}.
+  \item \textbf{Exfiltración de datos}: La salida de los comandos inyectados se refleja directamente en la respuesta HTML de la aplicación, exponiendo el contenido de los archivos al atacante.
+\end{enumerate}
 
 \subsection{Resultado}
 
-% TODO: completar tras realizar la tarea
+Se obtuvieron los archivos \texttt{/etc/passwd} y \texttt{/etc/shadow} del servidor Metasploitable2 directamente desde la interfaz web de DVWA. El archivo \texttt{/etc/passwd} reveló 19 cuentas de usuario del sistema, incluyendo cuentas con shell interactiva (\texttt{msfadmin}, \texttt{user}, \texttt{service}, \texttt{postgres}). El archivo \texttt{/etc/shadow} expuso los hashes de contraseñas de dichas cuentas, información que será utilizada en la Tarea 5 para realizar cracking de contraseñas fuera de línea con John the Ripper.
 
 % ==========================================================
 \section{Tarea 4: Fuerza Bruta a DVWA}
