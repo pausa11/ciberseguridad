@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  10 MAY 2026 22:59
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  10 MAY 2026 23:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -506,7 +506,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.26 ...suarios sin Autenticación}{20}{section.5}
+l.26 ...suarios sin Autenticación}{21}{section.5}
                                                   % [1])
 \tf@toc=\write4
 \openout4 = `actividad2-juice-shop.toc'.
@@ -535,13 +535,13 @@ Overfull \hbox (3.0148pt too wide) in paragraph at lines 127--128
 on que per-mi-te eje-cu-tar m�-qui-nas vir-tua-les x86_64
  []
 
-<../../img/environment/utm.png, id=148, 1927.2pt x 1084.05pt>
+<../../img/environment/utm.png, id=199, 1927.2pt x 1084.05pt>
 File: ../../img/environment/utm.png Graphic file (type png)
 <use ../../img/environment/utm.png>
 Package pdftex.def Info: ../../img/environment/utm.png  used on input line 134.
 
 (pdftex.def)             Requested size: 399.29494pt x 224.59709pt.
-<../../img/environment/kali.png, id=150, 1927.2pt x 1084.05pt>
+<../../img/environment/kali.png, id=201, 1927.2pt x 1084.05pt>
 File: ../../img/environment/kali.png Graphic file (type png)
 <use ../../img/environment/kali.png>
 Package pdftex.def Info: ../../img/environment/kali.png  used on input line 140
@@ -557,13 +557,13 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [4 <../../img/environment/utm.png>]
-<../../img/environment/ubuntu.png, id=158, 1927.2pt x 1084.05pt>
+<../../img/environment/ubuntu.png, id=209, 1927.2pt x 1084.05pt>
 File: ../../img/environment/ubuntu.png Graphic file (type png)
 <use ../../img/environment/ubuntu.png>
 Package pdftex.def Info: ../../img/environment/ubuntu.png  used on input line 1
 46.
 (pdftex.def)             Requested size: 399.29494pt x 224.59709pt.
-<../../img/juiceshop/juiceShopRunning.png, id=159, 1927.2pt x 1084.05pt>
+<../../img/juiceshop/juiceShopRunning.png, id=210, 1927.2pt x 1084.05pt>
 File: ../../img/juiceshop/juiceShopRunning.png Graphic file (type png)
 <use ../../img/juiceshop/juiceShopRunning.png>
 Package pdftex.def Info: ../../img/juiceshop/juiceShopRunning.png  used on inpu
@@ -605,7 +605,7 @@ File: lstlang1.sty 2024/09/23 1.10c listings language file
 (/usr/local/texlive/2025/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2024/09/23 1.10c listings language file
 )
-<../../img/tarea1/loginEnkali.png, id=179, 1927.2pt x 1084.05pt>
+<../../img/tarea1/loginEnkali.png, id=229, 1927.2pt x 1084.05pt>
 File: ../../img/tarea1/loginEnkali.png Graphic file (type png)
 <use ../../img/tarea1/loginEnkali.png>
 Package pdftex.def Info: ../../img/tarea1/loginEnkali.png  used on input line 1
@@ -621,7 +621,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [7]
-<../../img/tarea1/proxyConfig.png, id=189, 1927.2pt x 1010.77625pt>
+<../../img/tarea1/proxyConfig.png, id=239, 1927.2pt x 1010.77625pt>
 File: ../../img/tarea1/proxyConfig.png Graphic file (type png)
 <use ../../img/tarea1/proxyConfig.png>
 Package pdftex.def Info: ../../img/tarea1/proxyConfig.png  used on input line 2
@@ -637,7 +637,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [8 <../../img/tarea1/loginEnkali.png>]
-<../../img/tarea1/loginCredentials.png, id=196, 1927.2pt x 1052.93375pt>
+<../../img/tarea1/loginCredentials.png, id=246, 1927.2pt x 1052.93375pt>
 File: ../../img/tarea1/loginCredentials.png Graphic file (type png)
 <use ../../img/tarea1/loginCredentials.png>
 Package pdftex.def Info: ../../img/tarea1/loginCredentials.png  used on input l
@@ -655,7 +655,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [9 <../../img/tarea1/proxyConfig.png>]
-<../../img/tarea1/burpsuite.png, id=205, 1178.4025pt x 722.7pt>
+<../../img/tarea1/burpsuite.png, id=255, 1178.4025pt x 722.7pt>
 File: ../../img/tarea1/burpsuite.png Graphic file (type png)
 <use ../../img/tarea1/burpsuite.png>
 Package pdftex.def Info: ../../img/tarea1/burpsuite.png  used on input line 232
@@ -671,7 +671,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [10 <../../img/tarea1/loginCredentials.png>]
-<../../img/tarea1/juiceShopSucess.png, id=213, 1927.2pt x 1013.7875pt>
+<../../img/tarea1/juiceShopSucess.png, id=263, 1927.2pt x 1013.7875pt>
 File: ../../img/tarea1/juiceShopSucess.png Graphic file (type png)
 <use ../../img/tarea1/juiceShopSucess.png>
 Package pdftex.def Info: ../../img/tarea1/juiceShopSucess.png  used on input li
@@ -687,7 +687,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [11 <../../img/tarea1/burpsuite.png>]
-<../../img/tarea1/adminDashboard.png, id=220, 1927.2pt x 1013.7875pt>
+<../../img/tarea1/adminDashboard.png, id=270, 1927.2pt x 1013.7875pt>
 File: ../../img/tarea1/adminDashboard.png Graphic file (type png)
 <use ../../img/tarea1/adminDashboard.png>
 Package pdftex.def Info: ../../img/tarea1/adminDashboard.png  used on input lin
@@ -755,7 +755,7 @@ Overfull \hbox (51.16452pt too wide) in paragraph at lines 295--296
 t-support.kdbx\T1/ptm/m/n/12 , \T1/pcr/m/n/12 legal.md\T1/ptm/m/n/12 ,
  []
 
-<../../img/tarea2/t2_ftp_directory.png, id=242, 1927.2pt x 1084.05pt>
+<../../img/tarea2/t2_ftp_directory.png, id=292, 1927.2pt x 1084.05pt>
 File: ../../img/tarea2/t2_ftp_directory.png Graphic file (type png)
 <use ../../img/tarea2/t2_ftp_directory.png>
 Package pdftex.def Info: ../../img/tarea2/t2_ftp_directory.png  used on input l
@@ -771,7 +771,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [15 <../../img/tarea2/t2_ftp_directory.png>]
-<../../img/tarea2/t2_acquisitions_download.png, id=251, 972.63374pt x 1061.9675
+<../../img/tarea2/t2_acquisitions_download.png, id=302, 972.63374pt x 1061.9675
 pt>
 File: ../../img/tarea2/t2_acquisitions_download.png Graphic file (type png)
 <use ../../img/tarea2/t2_acquisitions_download.png>
@@ -797,7 +797,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [17 <../../img/tarea2/t2_acquisitions_download.png>]
-<../../img/tarea2/t2_curl_output.png, id=269, 974.64125pt x 1071.00125pt>
+<../../img/tarea2/t2_curl_output.png, id=320, 974.64125pt x 1071.00125pt>
 File: ../../img/tarea2/t2_curl_output.png Graphic file (type png)
 <use ../../img/tarea2/t2_curl_output.png>
 Package pdftex.def Info: ../../img/tarea2/t2_curl_output.png  used on input lin
@@ -839,7 +839,106 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[21] (./actividad2-juice-shop.aux
+[21]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[22]
+<../../img/tarea3/t3_api_users_raw.png, id=364, 972.63374pt x 1064.97874pt>
+File: ../../img/tarea3/t3_api_users_raw.png Graphic file (type png)
+<use ../../img/tarea3/t3_api_users_raw.png>
+Package pdftex.def Info: ../../img/tarea3/t3_api_users_raw.png  used on input l
+ine 410.
+(pdftex.def)             Requested size: 432.17409pt x 473.20717pt.
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[23 <../../img/tarea3/t3_api_users_raw.png>]
+<../../img/tarea3/t3_api_users_json.png, id=371, 974.64125pt x 1064.97874pt>
+File: ../../img/tarea3/t3_api_users_json.png Graphic file (type png)
+<use ../../img/tarea3/t3_api_users_json.png>
+Package pdftex.def Info: ../../img/tarea3/t3_api_users_json.png  used on input 
+line 428.
+(pdftex.def)             Requested size: 432.17409pt x 472.23215pt.
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[24]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[25 <../../img/tarea3/t3_api_users_json.png>]
+<../../img/tarea3/t3_browser_api.png, id=390, 984.67876pt x 1084.05pt>
+File: ../../img/tarea3/t3_browser_api.png Graphic file (type png)
+<use ../../img/tarea3/t3_browser_api.png>
+Package pdftex.def Info: ../../img/tarea3/t3_browser_api.png  used on input lin
+e 455.
+(pdftex.def)             Requested size: 432.17409pt x 475.79251pt.
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[26]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[27 <../../img/tarea3/t3_browser_api.png>]
+Overfull \hbox (11.55052pt too wide) in paragraph at lines 467--468
+\T1/pcr/m/n/12 /api/Users \T1/ptm/m/n/12 con ca-be-ce-ra \T1/pcr/m/n/12 Authori
+zation: Bearer <token> \T1/ptm/m/n/12 de-vuel-ve \T1/pcr/m/n/12 HTTP 200
+ []
+
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[28]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[29] (./actividad2-juice-shop.aux
 LaTeX Info: Redefining \. on input line 11.
 LaTeX Info: Redefining \% on input line 11.
 )
@@ -848,26 +947,26 @@ LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `actividad2-juice-shop.out' has not changed.
-(rerunfilecheck)             Checksum: 37C52476FD942308032D6C0D881E36B2;5572.
+(rerunfilecheck)             Checksum: 3FC53E823C9ABC7822E99195BAAE69CC;7997.
  ) 
 Here is how much of TeX's memory you used:
- 15566 strings out of 473190
- 246222 string characters out of 5715801
- 866406 words of memory out of 5000000
- 38552 multiletter control sequences out of 15000+600000
+ 15688 strings out of 473190
+ 248427 string characters out of 5715801
+ 956412 words of memory out of 5000000
+ 38615 multiletter control sequences out of 15000+600000
  587073 words of font info for 68 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,12n,79p,990b,2011s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,12n,79p,1040b,2017s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/
 local/texlive/2025/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/local/t
 exlive/2025/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/202
 5/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2025/texmf-d
 ist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/
 type1/urw/times/utmri8a.pfb>
-Output written on actividad2-juice-shop.pdf (22 pages, 4364314 bytes).
+Output written on actividad2-juice-shop.pdf (30 pages, 4986725 bytes).
 PDF statistics:
- 345 PDF objects out of 1000 (max. 8388607)
- 280 compressed objects within 3 object streams
- 88 named destinations out of 1000 (max. 500000)
- 266 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 489 PDF objects out of 1000 (max. 8388607)
+ 408 compressed objects within 5 object streams
+ 147 named destinations out of 1000 (max. 500000)
+ 361 words of extra memory for PDF output out of 10000 (max. 10000000)
 
