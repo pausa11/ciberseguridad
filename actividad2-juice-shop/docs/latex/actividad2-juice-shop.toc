@@ -1,18 +1,26 @@
 \babel@toc {spanish}{}\relax 
-\contentsline {section}{\numberline {1}Introducción}{2}{section.1}%
-\contentsline {section}{\numberline {2}Configuración del Entorno}{2}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Descripción del entorno}{2}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Herramientas del entorno}{3}{subsection.2.2}%
-\contentsline {section}{\numberline {3}Tarea 1: SQL Injection --- Bypass de Autenticación}{5}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Descripción de la vulnerabilidad}{5}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Herramientas utilizadas}{6}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}Pasos realizados}{6}{subsection.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.1}Acceso al formulario de login}{6}{subsubsection.3.3.1}%
-\contentsline {subsubsection}{\numberline {3.3.2}Configuración de Burp Suite como proxy HTTP}{7}{subsubsection.3.3.2}%
-\contentsline {subsubsection}{\numberline {3.3.3}Inyección del payload}{8}{subsubsection.3.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.4}Intercepción de la petición POST en Burp Suite}{9}{subsubsection.3.3.4}%
-\contentsline {subsubsection}{\numberline {3.3.5}Verificación del acceso como administrador}{10}{subsubsection.3.3.5}%
-\contentsline {subsection}{\numberline {3.4}Funcionamiento del ataque}{11}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}Resultado}{12}{subsection.3.5}%
-\contentsline {section}{\numberline {4}Tarea 2: Sensitive Data Exposure --- Directorio /ftp Expuesto}{12}{section.4}%
-\contentsline {section}{\numberline {5}Tarea 3: Broken Access Control --- API de Usuarios sin Autenticación}{13}{section.5}%
+\contentsline {section}{\numberline {1}Introducción}{3}{section.1}%
+\contentsline {section}{\numberline {2}Configuración del Entorno}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Descripción del entorno}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Herramientas del entorno}{4}{subsection.2.2}%
+\contentsline {section}{\numberline {3}Tarea 1: SQL Injection --- Bypass de Autenticación}{6}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Descripción de la vulnerabilidad}{6}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Herramientas utilizadas}{7}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Pasos realizados}{7}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}Acceso al formulario de login}{7}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.2}Configuración de Burp Suite como proxy HTTP}{8}{subsubsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.3}Inyección del payload}{9}{subsubsection.3.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.4}Intercepción de la petición POST en Burp Suite}{10}{subsubsection.3.3.4}%
+\contentsline {subsubsection}{\numberline {3.3.5}Verificación del acceso como administrador}{11}{subsubsection.3.3.5}%
+\contentsline {subsection}{\numberline {3.4}Funcionamiento del ataque}{12}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Resultado}{13}{subsection.3.5}%
+\contentsline {section}{\numberline {4}Tarea 2: Sensitive Data Exposure --- Directorio /ftp Expuesto}{14}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Descripción de la vulnerabilidad}{14}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Herramientas utilizadas}{14}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Pasos realizados}{15}{subsection.4.3}%
+\contentsline {subsubsection}{\numberline {4.3.1}Acceso al directorio /ftp sin autenticación}{15}{subsubsection.4.3.1}%
+\contentsline {subsubsection}{\numberline {4.3.2}Descarga de acquisitions.md con curl}{16}{subsubsection.4.3.2}%
+\contentsline {subsubsection}{\numberline {4.3.3}Intento de descarga de package.json.bak}{17}{subsubsection.4.3.3}%
+\contentsline {subsection}{\numberline {4.4}Funcionamiento del ataque}{19}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Resultado}{20}{subsection.4.5}%
+\contentsline {section}{\numberline {5}Tarea 3: Broken Access Control --- API de Usuarios sin Autenticación}{21}{section.5}%

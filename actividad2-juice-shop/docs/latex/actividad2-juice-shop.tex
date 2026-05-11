@@ -267,7 +267,90 @@ Se logró el inicio de sesión exitoso como administrador (\texttt{admin@juice-s
 % ==========================================================
 \section{Tarea 2: Sensitive Data Exposure --- Directorio /ftp Expuesto}
 
-\textit{(Pendiente de documentación)}
+\subsection{Descripción de la vulnerabilidad}
+
+La exposición de datos sensibles (\textit{Sensitive Data Exposure}) corresponde a la categoría \textbf{A02 -- Fallos Criptográficos} del OWASP Top 10 (2021) y está catalogada bajo \textbf{CWE-538} (\textit{File and Directory Information Exposure}). Esta vulnerabilidad se produce cuando una aplicación expone recursos o rutas del servidor sin ningún mecanismo de control de acceso ni autenticación, permitiendo a cualquier usuario o atacante acceder a archivos potencialmente confidenciales simplemente conociendo la URL.
+
+En el caso de OWASP Juice Shop, el directorio \texttt{/ftp} del servidor se encuentra completamente accesible desde el navegador sin requerir sesión activa ni credenciales. Este directorio contiene archivos sensibles del negocio, entre ellos planes de adquisición corporativa (\texttt{acquisitions.md}), archivos de configuración cifrados (\texttt{announcement\_encrypted.md}), bases de datos de gestión de incidentes (\texttt{incident-support.kdbx}) y copias de seguridad de dependencias (\texttt{package.json.bak}).
+
+La aplicación intenta restringir parcialmente el acceso a archivos con extensiones consideradas peligrosas (como \texttt{.bak}) retornando un código HTTP 403, pero esta medida es insuficiente: el directorio sigue siendo listable, los archivos con extensión \texttt{.md} se descargan libremente, y la mera existencia de los archivos restringidos queda expuesta en el listado.
+
+\subsection{Herramientas utilizadas}
+
+\begin{itemize}
+  \item \textbf{Firefox (Kali Linux)}: Navegador web utilizado para acceder y visualizar el listado del directorio \texttt{/ftp} sin autenticación.
+  \item \textbf{curl}: Herramienta de transferencia de datos por línea de comandos utilizada para descargar archivos individuales del directorio expuesto y examinar las cabeceras HTTP de respuesta del servidor.
+\end{itemize}
+
+\subsection{Pasos realizados}
+
+\subsubsection{Acceso al directorio /ftp sin autenticación}
+
+Sin haber iniciado sesión en la aplicación, se navegó directamente al directorio \texttt{/ftp} desde Firefox en Kali Linux:
+
+\begin{lstlisting}[language=bash, caption={URL del directorio FTP expuesto}]
+http://192.168.40.11:3000/ftp
+\end{lstlisting}
+
+El servidor respondió mostrando un listado completo de archivos sin solicitar credenciales. El directorio contenía los siguientes archivos: \texttt{acquisitions.md}, \texttt{announcement\_encrypted.md}, \texttt{coupons\_2013.md.bak}, \texttt{eastere.gg}, \texttt{encrypt.pyc}, \texttt{incident-support.kdbx}, \texttt{legal.md}, \texttt{package-lock.json.bak}, \texttt{package.json.bak} y \texttt{suspicious\_errors.yml}, además de una carpeta \texttt{quarantine/}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{../../img/tarea2/t2_ftp_directory.png}
+  \caption{\textit{Listado del directorio \texttt{/ftp} de Juice Shop accedido desde Firefox en Kali Linux sin ningún tipo de autenticación.}}
+\end{figure}
+
+\subsubsection{Descarga de acquisitions.md con curl}
+
+Desde la terminal de Kali Linux se utilizó \texttt{curl} con la opción \texttt{-v} (verbose) para descargar el archivo \texttt{acquisitions.md} y examinar las cabeceras de la respuesta HTTP:
+
+\begin{lstlisting}[language=bash, caption={Descarga del archivo de adquisiciones mediante curl}]
+mkdir -p ~/tarea2
+cd ~/tarea2
+curl -v http://192.168.40.11:3000/ftp/acquisitions.md -o acquisitions.md
+echo "--- CONTENIDO DEL ARCHIVO ---"
+cat acquisitions.md
+\end{lstlisting}
+
+El servidor respondió con código \textbf{HTTP 200 OK}, transfiriendo 909 bytes con tipo de contenido \texttt{text/markdown}. El archivo reveló información corporativa altamente sensible: planes de adquisición de competidores con impacto en el mercado bursátil, marcados explícitamente como \textit{``This document is confidential! Do not distribute!''}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{../../img/tarea2/t2_acquisitions_download.png}
+  \caption{\textit{Descarga exitosa de \texttt{acquisitions.md} mediante curl (HTTP 200 OK) y visualización de su contenido confidencial en la terminal de Kali Linux.}}
+\end{figure}
+
+\subsubsection{Intento de descarga de package.json.bak}
+
+Se intentó descargar el archivo \texttt{package.json.bak}, que podría revelar las dependencias exactas y versiones del proyecto, útiles para identificar vulnerabilidades conocidas en las bibliotecas utilizadas:
+
+\begin{lstlisting}[language=bash, caption={Intento de descarga de package.json.bak}]
+curl -v http://192.168.40.11:3000/ftp/package.json.bak -o package.json.bak
+head -20 package.json.bak
+\end{lstlisting}
+
+El servidor respondió con \textbf{HTTP 403 Forbidden} y el mensaje \textit{``Error: Only .md and .pdf files are allowed!''}, denegando el acceso a archivos con extensión \texttt{.bak}. Sin embargo, esta restricción resulta insuficiente como medida de seguridad: el archivo es visible en el listado del directorio, confirmando su existencia, y la restricción solo aplica a ciertas extensiones, dejando accesibles otros archivos sensibles como \texttt{.md} o \texttt{.pyc}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{../../img/tarea2/t2_curl_output.png}
+  \caption{\textit{Respuesta HTTP 403 Forbidden al intentar descargar \texttt{package.json.bak}. El mensaje de error expone la lógica de filtrado del servidor, evidenciando una restricción parcial e insuficiente.}}
+\end{figure}
+
+\subsection{Funcionamiento del ataque}
+
+La vulnerabilidad de exposición del directorio \texttt{/ftp} sigue el siguiente flujo de explotación:
+
+\begin{enumerate}
+  \item \textbf{Descubrimiento de la ruta}: El atacante, mediante reconocimiento web (herramientas de fuzzing de directorios como \texttt{gobuster} o \texttt{dirbuster}, o simplemente conocimiento previo de la estructura de Juice Shop), identifica la ruta \texttt{/ftp} como accesible públicamente.
+  \item \textbf{Listado del directorio}: El servidor Node.js de Juice Shop sirve el directorio sin verificar si el solicitante posee una sesión autenticada. El listado completo de archivos queda expuesto, revelando la existencia de documentos sensibles.
+  \item \textbf{Descarga de archivos sin restricción}: Archivos con extensiones \texttt{.md}, \texttt{.pyc}, \texttt{.gg} y \texttt{.yml} se transfieren con código HTTP 200 ante cualquier solicitud GET, sin verificar autenticación, rol o permisos del solicitante.
+  \item \textbf{Restricción parcial bypasseable}: La única defensa implementada es un filtro de extensiones que bloquea \texttt{.bak} y similares con HTTP 403. Esta medida es trivialmente insuficiente: no oculta la existencia de los archivos, no protege las extensiones permitidas, y puede ser evadida mediante técnicas de path traversal o manipulación de la solicitud HTTP en versiones vulnerables.
+\end{enumerate}
+
+\subsection{Resultado}
+
+Se accedió y descargó exitosamente el archivo \texttt{acquisitions.md} desde el directorio \texttt{/ftp} de Juice Shop sin ningún tipo de autenticación, obteniendo documentación corporativa marcada como confidencial que detalla planes de adquisición de competidores con potencial impacto en el mercado bursátil. Adicionalmente, se verificó la existencia de múltiples archivos de alto valor informativo en el directorio expuesto: bases de datos de gestión de incidentes (\texttt{incident-support.kdbx}), copias de seguridad de configuración (\texttt{package.json.bak}), y código Python compilado (\texttt{encrypt.pyc}). La restricción parcial implementada mediante filtrado de extensiones resultó ser una medida de seguridad por oscuridad, insuficiente para proteger los recursos expuestos. Esta vulnerabilidad corresponde a la categoría \textbf{CWE-538} y \textbf{A02 -- Fallos Criptográficos} del OWASP Top 10 (2021).
 
 % ==========================================================
 \section{Tarea 3: Broken Access Control --- API de Usuarios sin Autenticación}

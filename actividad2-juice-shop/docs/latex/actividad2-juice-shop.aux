@@ -9,36 +9,50 @@
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
 \babel@aux{spanish}{}
-\@writefile{toc}{\contentsline {section}{\numberline {1}Introducción}{2}{section.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2}Configuración del Entorno}{2}{section.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Descripción del entorno}{2}{subsection.2.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces \textit  {Configuración de las máquinas virtuales}}}{3}{table.caption.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Herramientas del entorno}{3}{subsection.2.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \textit  {Vista del hipervisor UTM con las máquinas virtuales activas.}}}{3}{figure.caption.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces \textit  {Máquina virtual Kali Linux (atacante) en ejecución.}}}{4}{figure.caption.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \textit  {Máquina virtual Ubuntu 22.04 con Juice Shop (víctima) en ejecución.}}}{4}{figure.caption.4}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces \textit  {OWASP Juice Shop corriendo en el puerto 3000 de la máquina víctima.}}}{5}{figure.caption.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3}Tarea 1: SQL Injection --- Bypass de Autenticación}{5}{section.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Descripción de la vulnerabilidad}{5}{subsection.3.1}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {1}{\ignorespaces Consulta SQL vulnerable (simplificada)}}{5}{lstlisting.1}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}{\ignorespaces Consulta SQL resultante tras la inyección del payload}}{6}{lstlisting.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Herramientas utilizadas}{6}{subsection.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Pasos realizados}{6}{subsection.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.1}Acceso al formulario de login}{6}{subsubsection.3.3.1}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3}{\ignorespaces URL del formulario de login de Juice Shop}}{6}{lstlisting.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces \textit  {Página de login de OWASP Juice Shop accedida desde Firefox en Kali Linux.}}}{7}{figure.caption.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.2}Configuración de Burp Suite como proxy HTTP}{7}{subsubsection.3.3.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces \textit  {Configuración del proxy manual en Firefox apuntando a Burp Suite en 127.0.0.1:8080.}}}{8}{figure.caption.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.3}Inyección del payload}{8}{subsubsection.3.3.3}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {4}{\ignorespaces Payload de SQL Injection para bypass de autenticación}}{8}{lstlisting.4}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces \textit  {Formulario de login de Juice Shop con el payload \texttt  {' OR 1=1--} ingresado en el campo Email y valor arbitrario en Password.}}}{9}{figure.caption.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.4}Intercepción de la petición POST en Burp Suite}{9}{subsubsection.3.3.4}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces \textit  {Petición POST a \texttt  {/rest/user/login} interceptada en Burp Suite con el payload de SQL Injection en el cuerpo de la solicitud.}}}{10}{figure.caption.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.5}Verificación del acceso como administrador}{10}{subsubsection.3.3.5}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces \textit  {Banner de confirmación de Juice Shop indicando que el desafío ``Login Admin'' fue resuelto exitosamente mediante SQL Injection.}}}{11}{figure.caption.10}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces \textit  {Pantalla principal de Juice Shop tras el bypass exitoso, con sesión activa como administrador.}}}{11}{figure.caption.11}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Funcionamiento del ataque}{11}{subsection.3.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Resultado}{12}{subsection.3.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4}Tarea 2: Sensitive Data Exposure --- Directorio /ftp Expuesto}{12}{section.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}Tarea 3: Broken Access Control --- API de Usuarios sin Autenticación}{13}{section.5}\protected@file@percent }
-\gdef \@abspage@last{14}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introducción}{3}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Configuración del Entorno}{3}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Descripción del entorno}{3}{subsection.2.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces \textit  {Configuración de las máquinas virtuales}}}{4}{table.caption.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Herramientas del entorno}{4}{subsection.2.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \textit  {Vista del hipervisor UTM con las máquinas virtuales activas.}}}{4}{figure.caption.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces \textit  {Máquina virtual Kali Linux (atacante) en ejecución.}}}{5}{figure.caption.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \textit  {Máquina virtual Ubuntu 22.04 con Juice Shop (víctima) en ejecución.}}}{5}{figure.caption.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces \textit  {OWASP Juice Shop corriendo en el puerto 3000 de la máquina víctima.}}}{6}{figure.caption.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Tarea 1: SQL Injection --- Bypass de Autenticación}{6}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Descripción de la vulnerabilidad}{6}{subsection.3.1}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {1}{\ignorespaces Consulta SQL vulnerable (simplificada)}}{6}{lstlisting.1}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}{\ignorespaces Consulta SQL resultante tras la inyección del payload}}{7}{lstlisting.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Herramientas utilizadas}{7}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Pasos realizados}{7}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.1}Acceso al formulario de login}{7}{subsubsection.3.3.1}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3}{\ignorespaces URL del formulario de login de Juice Shop}}{7}{lstlisting.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces \textit  {Página de login de OWASP Juice Shop accedida desde Firefox en Kali Linux.}}}{8}{figure.caption.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.2}Configuración de Burp Suite como proxy HTTP}{8}{subsubsection.3.3.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces \textit  {Configuración del proxy manual en Firefox apuntando a Burp Suite en 127.0.0.1:8080.}}}{9}{figure.caption.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.3}Inyección del payload}{9}{subsubsection.3.3.3}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4}{\ignorespaces Payload de SQL Injection para bypass de autenticación}}{9}{lstlisting.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces \textit  {Formulario de login de Juice Shop con el payload \texttt  {' OR 1=1--} ingresado en el campo Email y valor arbitrario en Password.}}}{10}{figure.caption.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.4}Intercepción de la petición POST en Burp Suite}{10}{subsubsection.3.3.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces \textit  {Petición POST a \texttt  {/rest/user/login} interceptada en Burp Suite con el payload de SQL Injection en el cuerpo de la solicitud.}}}{11}{figure.caption.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.5}Verificación del acceso como administrador}{11}{subsubsection.3.3.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces \textit  {Banner de confirmación de Juice Shop indicando que el desafío ``Login Admin'' fue resuelto exitosamente mediante SQL Injection.}}}{12}{figure.caption.10}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces \textit  {Pantalla principal de Juice Shop tras el bypass exitoso, con sesión activa como administrador.}}}{12}{figure.caption.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Funcionamiento del ataque}{12}{subsection.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Resultado}{13}{subsection.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Tarea 2: Sensitive Data Exposure --- Directorio /ftp Expuesto}{14}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Descripción de la vulnerabilidad}{14}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Herramientas utilizadas}{14}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Pasos realizados}{15}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Acceso al directorio /ftp sin autenticación}{15}{subsubsection.4.3.1}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5}{\ignorespaces URL del directorio FTP expuesto}}{15}{lstlisting.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces \textit  {Listado del directorio \texttt  {/ftp} de Juice Shop accedido desde Firefox en Kali Linux sin ningún tipo de autenticación.}}}{15}{figure.caption.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Descarga de acquisitions.md con curl}{16}{subsubsection.4.3.2}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6}{\ignorespaces Descarga del archivo de adquisiciones mediante curl}}{16}{lstlisting.6}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces \textit  {Descarga exitosa de \texttt  {acquisitions.md} mediante curl (HTTP 200 OK) y visualización de su contenido confidencial en la terminal de Kali Linux.}}}{17}{figure.caption.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.3}Intento de descarga de package.json.bak}{17}{subsubsection.4.3.3}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {7}{\ignorespaces Intento de descarga de package.json.bak}}{17}{lstlisting.7}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces \textit  {Respuesta HTTP 403 Forbidden al intentar descargar \texttt  {package.json.bak}. El mensaje de error expone la lógica de filtrado del servidor, evidenciando una restricción parcial e insuficiente.}}}{19}{figure.caption.14}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Funcionamiento del ataque}{19}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Resultado}{20}{subsection.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Tarea 3: Broken Access Control --- API de Usuarios sin Autenticación}{21}{section.5}\protected@file@percent }
+\gdef \@abspage@last{22}
