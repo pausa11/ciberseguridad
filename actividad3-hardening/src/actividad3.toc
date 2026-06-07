@@ -1,0 +1,23 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Introducción}{2}{section.1}%
+\contentsline {section}{\numberline {2}Marco Teórico}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Hardening de sistemas operativos}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}SCAP (Security Content Automation Protocol)}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}OpenSCAP}{3}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}CIS Benchmarks}{4}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}SCAP Security Guide (SSG)}{4}{subsection.2.5}%
+\contentsline {section}{\numberline {3}Metodología}{4}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Fase 1: Instalación de Ubuntu Server 24.04}{5}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Fase 2: Instalación de OpenSCAP}{5}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Fase 3: Descarga de la SCAP Security Guide}{6}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Fase 4: Escaneo inicial (línea base)}{8}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Fase 5: Remediación automática}{8}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}Fase 6: Escaneo final (post-remediación)}{10}{subsection.3.6}%
+\contentsline {subsection}{\numberline {3.7}Fase 7: Transferencia de reportes al Mac anfitrión}{11}{subsection.3.7}%
+\contentsline {section}{\numberline {4}Resultados}{11}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Comparación de puntuación antes y después}{11}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Análisis de la mejora}{12}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Controles más relevantes remediados}{13}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Conclusiones}{13}{section.5}%
+\contentsline {section}{\numberline {6}Referencias}{14}{section.6}%
+\contentsline {section}{Anexos}{15}{section.6}%
